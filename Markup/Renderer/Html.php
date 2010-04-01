@@ -17,25 +17,25 @@
  * @subpackage Renderer
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Html.php 20662 2010-01-26 18:40:33Z kokx $
+ * @version    $Id: Html.php 21551 2010-03-18 17:19:11Z kokx $
  */
 
 /**
  * @see Zend_Filter_HtmlEntities
  */
-// require_once 'Zend/Filter/HtmlEntities.php';
+require_once 'Zend/Filter/HtmlEntities.php';
 /**
  * @see Zend_Filter_PregReplace
  */
-// require_once 'Zend/Filter/PregReplace.php';
+require_once 'Zend/Filter/PregReplace.php';
 /**
  * @see Zend_Filter_Callback
  */
-// require_once 'Zend/Filter/Callback.php';
+require_once 'Zend/Filter/Callback.php';
 /**
  * @see Zend_Markup_Renderer_RendererAbstract
  */
-// require_once 'Zend/Markup/Renderer/RendererAbstract.php';
+require_once 'Zend/Markup/Renderer/RendererAbstract.php';
 
 /**
  * HTML renderer
@@ -182,37 +182,37 @@ class Zend_Markup_Renderer_Html extends Zend_Markup_Renderer_RendererAbstract
                 'type'   => 10,
                 'tag'    => 'h1',
                 'group'  => 'inline',
-                'filter' => false,
+                'filter' => true,
             ),
             'h2' => array(
                 'type'   => 10,
                 'tag'    => 'h2',
                 'group'  => 'inline',
-                'filter' => false,
+                'filter' => true,
             ),
             'h3' => array(
                 'type'   => 10,
                 'tag'    => 'h3',
                 'group'  => 'inline',
-                'filter' => false,
+                'filter' => true,
             ),
             'h4' => array(
                 'type'   => 10,
                 'tag'    => 'h4',
                 'group'  => 'inline',
-                'filter' => false,
+                'filter' => true,
             ),
             'h5' => array(
                 'type'   => 10,
                 'tag'    => 'h5',
                 'group'  => 'inline',
-                'filter' => false,
+                'filter' => true,
             ),
             'h6' => array(
                 'type'   => 10,
                 'tag'    => 'h6',
                 'group'  => 'inline',
-                'filter' => false,
+                'filter' => true,
             ),
             // callback tags
             'url' => array(

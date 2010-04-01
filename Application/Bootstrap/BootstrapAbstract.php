@@ -649,6 +649,7 @@ abstract class Zend_Application_Bootstrap_BootstrapAbstract
     protected function _executeResource($resource)
     {
         $resourceName = strtolower($resource);
+
         if (in_array($resourceName, $this->_run)) {
             return;
         }

@@ -17,18 +17,18 @@
  * @subpackage Object
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Code39.php 20096 2010-01-06 02:05:09Z bkarwin $
+ * @version    $Id: Code39.php 21658 2010-03-27 14:29:57Z mikaelkael $
  */
 
 /**
  * @see Zend_Barcode_Object_ObjectAbstract
  */
-// require_once 'Zend/Barcode/Object/ObjectAbstract.php';
+require_once 'Zend/Barcode/Object/ObjectAbstract.php';
 
 /**
  * @see 'Zend_Validate_Barcode'
  */
-// require_once 'Zend/Validate/Barcode.php';
+require_once 'Zend/Validate/Barcode.php';
 
 /**
  * Class for generate Code39 barcode
@@ -44,7 +44,7 @@ class Zend_Barcode_Object_Code39 extends Zend_Barcode_Object_ObjectAbstract
      * Coding map
      * @var array
      */
-    private $_codingMap = array(
+    protected $_codingMap = array(
         '0' => '000110100',
         '1' => '100100001',
         '2' => '001100001',

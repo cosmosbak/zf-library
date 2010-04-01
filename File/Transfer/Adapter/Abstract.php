@@ -16,7 +16,7 @@
  * @package   Zend_File_Transfer
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd     New BSD License
- * @version   $Id: Abstract.php 21039 2010-02-12 20:48:37Z thomas $
+ * @version   $Id: Abstract.php 21468 2010-03-11 21:21:55Z thomas $
  */
 
 /**
@@ -171,7 +171,7 @@ abstract class Zend_File_Transfer_Adapter_Abstract
      */
     public static function getProgress()
     {
-        // require_once 'Zend/File/Transfer/Exception.php';
+        require_once 'Zend/File/Transfer/Exception.php';
         throw new Zend_File_Transfer_Exception('Method must be implemented within the adapter');
     }
 
@@ -192,7 +192,7 @@ abstract class Zend_File_Transfer_Adapter_Abstract
                 $this->_loaders[$type] = $loader;
                 return $this;
             default:
-                // require_once 'Zend/File/Transfer/Exception.php';
+                require_once 'Zend/File/Transfer/Exception.php';
                 throw new Zend_File_Transfer_Exception(sprintf('Invalid type "%s" provided to setPluginLoader()', $type));
         }
     }
@@ -221,7 +221,7 @@ abstract class Zend_File_Transfer_Adapter_Abstract
                         'Zend_' . $prefixSegment . '_File' => 'Zend/' . $pathSegment . '/File',
                     );
 
-                    // require_once 'Zend/Loader/PluginLoader.php';
+                    require_once 'Zend/Loader/PluginLoader.php';
                     $this->_loaders[$type] = new Zend_Loader_PluginLoader($paths);
                 } else {
                     $loader = $this->_loaders[$type];
@@ -232,7 +232,7 @@ abstract class Zend_File_Transfer_Adapter_Abstract
                 }
                 return $this->_loaders[$type];
             default:
-                // require_once 'Zend/File/Transfer/Exception.php';
+                require_once 'Zend/File/Transfer/Exception.php';
                 throw new Zend_File_Transfer_Exception(sprintf('Invalid type "%s" provided to getPluginLoader()', $type));
         }
     }
@@ -274,7 +274,7 @@ abstract class Zend_File_Transfer_Adapter_Abstract
                 }
                 return $this;
             default:
-                // require_once 'Zend/File/Transfer/Exception.php';
+                require_once 'Zend/File/Transfer/Exception.php';
                 throw new Zend_File_Transfer_Exception(sprintf('Invalid type "%s" provided to getPluginLoader()', $type));
         }
     }
@@ -347,7 +347,7 @@ abstract class Zend_File_Transfer_Adapter_Abstract
                 unset($options['messages']);
             }
         } else {
-            // require_once 'Zend/File/Transfer/Exception.php';
+            require_once 'Zend/File/Transfer/Exception.php';
             throw new Zend_File_Transfer_Exception('Invalid validator provided to addValidator; must be string or Zend_Validate_Interface');
         }
 
@@ -422,7 +422,7 @@ abstract class Zend_File_Transfer_Adapter_Abstract
                     }
                 }
             } else {
-                // require_once 'Zend/File/Transfer/Exception.php';
+                require_once 'Zend/File/Transfer/Exception.php';
                 throw new Zend_File_Transfer_Exception('Invalid validator passed to addValidators()');
             }
         }
@@ -571,7 +571,7 @@ abstract class Zend_File_Transfer_Adapter_Abstract
                             break;
 
                         default:
-                            // require_once 'Zend/File/Transfer/Exception.php';
+                            require_once 'Zend/File/Transfer/Exception.php';
                             throw new Zend_File_Transfer_Exception("Unknown option: $name = $value");
                     }
                 }
@@ -621,6 +621,11 @@ abstract class Zend_File_Transfer_Adapter_Abstract
             if (array_key_exists('validators', $content) &&
                 in_array('Zend_Validate_File_Count', $content['validators'])) {
                 $validator = $this->_validators['Zend_Validate_File_Count'];
+                $count     = $content;
+                if (empty($content['tmp_name'])) {
+                    continue;
+                }
+
                 if (array_key_exists('destination', $content)) {
                     $checkit = $content['destination'];
                 } else {
@@ -628,8 +633,7 @@ abstract class Zend_File_Transfer_Adapter_Abstract
                 }
 
                 $checkit .= DIRECTORY_SEPARATOR . $content['name'];
-                $validator->addFile($checkit);
-                $count = $content;
+                    $validator->addFile($checkit);
             }
         }
 
@@ -743,7 +747,7 @@ abstract class Zend_File_Transfer_Adapter_Abstract
             $class  = $this->getPluginLoader(self::FILTER)->load($filter);
             $filter = new $class($options);
         } else {
-            // require_once 'Zend/File/Transfer/Exception.php';
+            require_once 'Zend/File/Transfer/Exception.php';
             throw new Zend_File_Transfer_Exception('Invalid filter specified');
         }
 
@@ -918,7 +922,7 @@ abstract class Zend_File_Transfer_Adapter_Abstract
      */
     public function getFile()
     {
-        // require_once 'Zend/File/Transfer/Exception.php';
+        require_once 'Zend/File/Transfer/Exception.php';
         throw new Zend_File_Transfer_Exception('Method not implemented');
     }
 
@@ -975,7 +979,7 @@ abstract class Zend_File_Transfer_Adapter_Abstract
      */
     public function addFile($file, $validator = null, $filter = null)
     {
-        // require_once 'Zend/File/Transfer/Exception.php';
+        require_once 'Zend/File/Transfer/Exception.php';
         throw new Zend_File_Transfer_Exception('Method not implemented');
     }
 
@@ -987,7 +991,7 @@ abstract class Zend_File_Transfer_Adapter_Abstract
      */
     public function getType()
     {
-        // require_once 'Zend/File/Transfer/Exception.php';
+        require_once 'Zend/File/Transfer/Exception.php';
         throw new Zend_File_Transfer_Exception('Method not implemented');
     }
 
@@ -1002,7 +1006,7 @@ abstract class Zend_File_Transfer_Adapter_Abstract
      */
     public function addType($type, $validator = null, $filter = null)
     {
-        // require_once 'Zend/File/Transfer/Exception.php';
+        require_once 'Zend/File/Transfer/Exception.php';
         throw new Zend_File_Transfer_Exception('Method not implemented');
     }
 
@@ -1020,12 +1024,12 @@ abstract class Zend_File_Transfer_Adapter_Abstract
         $orig = $files;
         $destination = rtrim($destination, "/\\");
         if (!is_dir($destination)) {
-            // require_once 'Zend/File/Transfer/Exception.php';
-            throw new Zend_File_Transfer_Exception('The given destination is no directory or does not exist');
+            require_once 'Zend/File/Transfer/Exception.php';
+            throw new Zend_File_Transfer_Exception('The given destination is not a directory or does not exist');
         }
 
         if (!is_writable($destination)) {
-            // require_once 'Zend/File/Transfer/Exception.php';
+            require_once 'Zend/File/Transfer/Exception.php';
             throw new Zend_File_Transfer_Exception('The given destination is not writeable');
         }
 
@@ -1062,8 +1066,8 @@ abstract class Zend_File_Transfer_Adapter_Abstract
             if (isset($this->_files[$orig]['destination'])) {
                 $destinations[$orig] = $this->_files[$orig]['destination'];
             } else {
-                // require_once 'Zend/File/Transfer/Exception.php';
-                throw new Zend_File_Transfer_Exception(sprintf('"%s" not found by file transfer adapter', $orig));
+                require_once 'Zend/File/Transfer/Exception.php';
+                throw new Zend_File_Transfer_Exception(sprintf('The file transfer adapter can not find "%s"', $orig));
             }
         }
 
@@ -1101,7 +1105,7 @@ abstract class Zend_File_Transfer_Adapter_Abstract
         } elseif ($translator instanceof Zend_Translate) {
             $this->_translator = $translator->getAdapter();
         } else {
-            // require_once 'Zend/File/Transfer/Exception.php';
+            require_once 'Zend/File/Transfer/Exception.php';
             throw new Zend_File_Transfer_Exception('Invalid translator specified');
         }
 
@@ -1155,7 +1159,7 @@ abstract class Zend_File_Transfer_Adapter_Abstract
     public function getHash($hash = 'crc32', $files = null)
     {
         if (!in_array($hash, hash_algos())) {
-            // require_once 'Zend/File/Transfer/Exception.php';
+            require_once 'Zend/File/Transfer/Exception.php';
             throw new Zend_File_Transfer_Exception('Unknown hash algorithm');
         }
 
@@ -1167,8 +1171,8 @@ abstract class Zend_File_Transfer_Adapter_Abstract
             } else if (file_exists($value['tmp_name'])) {
                 $result[$key] = hash_file($hash, $value['tmp_name']);
             } else if (empty($value['options']['ignoreNoFile'])) {
-                // require_once 'Zend/File/Transfer/Exception.php';
-                throw new Zend_File_Transfer_Exception("File '{$value['name']}' does not exist");
+                require_once 'Zend/File/Transfer/Exception.php';
+                throw new Zend_File_Transfer_Exception("The file '{$value['name']}' does not exist");
             }
         }
 
@@ -1198,8 +1202,8 @@ abstract class Zend_File_Transfer_Adapter_Abstract
                     $result[$key] = $value['size'];
                 }
             } else if (empty($value['options']['ignoreNoFile'])) {
-                // require_once 'Zend/File/Transfer/Exception.php';
-                throw new Zend_File_Transfer_Exception("File '{$value['name']}' does not exist");
+                require_once 'Zend/File/Transfer/Exception.php';
+                throw new Zend_File_Transfer_Exception("The file '{$value['name']}' does not exist");
             } else {
                 continue;
             }
@@ -1247,8 +1251,8 @@ abstract class Zend_File_Transfer_Adapter_Abstract
             if (file_exists($value['name']) || file_exists($value['tmp_name'])) {
                 $result[$key] = $value['type'];
             } else if (empty($value['options']['ignoreNoFile'])) {
-                // require_once 'Zend/File/Transfer/Exception.php';
-                throw new Zend_File_Transfer_Exception("File '{$value['name']}' does not exist");
+                require_once 'Zend/File/Transfer/Exception.php';
+                throw new Zend_File_Transfer_Exception("The file '{$value['name']}' does not exist");
             } else {
                 continue;
             }
@@ -1280,13 +1284,15 @@ abstract class Zend_File_Transfer_Adapter_Abstract
         if (class_exists('finfo', false)) {
             $const = defined('FILEINFO_MIME_TYPE') ? FILEINFO_MIME_TYPE : FILEINFO_MIME;
             if (!empty($value['options']['magicFile'])) {
-                $mime = new finfo($const, $value['options']['magicFile']);
-            } else {
-                $mime = new finfo($const);
+                $mime = @finfo_open($const, $value['options']['magicFile']);
+            }
+
+            if (empty($mime)) {
+                $mime = @finfo_open($const);
             }
 
             if ($mime !== false) {
-                $result = $mime->file($file);
+                $result = finfo_file($mime, $file);
             }
 
             unset($mime);
@@ -1396,8 +1402,8 @@ abstract class Zend_File_Transfer_Adapter_Abstract
                     $this->_tmpDir = realpath(dirname($tempFile));
                     unlink($tempFile);
                 } else {
-                    // require_once 'Zend/File/Transfer/Exception.php';
-                    throw new Zend_File_Transfer_Exception('Could not determine temp directory');
+                    require_once 'Zend/File/Transfer/Exception.php';
+                    throw new Zend_File_Transfer_Exception('Could not determine a temporary directory');
                 }
             }
 
@@ -1479,8 +1485,8 @@ abstract class Zend_File_Transfer_Adapter_Abstract
                         return array();
                     }
 
-                    // require_once 'Zend/File/Transfer/Exception.php';
-                    throw new Zend_File_Transfer_Exception(sprintf('"%s" not found by file transfer adapter', $find));
+                    require_once 'Zend/File/Transfer/Exception.php';
+                    throw new Zend_File_Transfer_Exception(sprintf('The file transfer adapter can not find "%s"', $find));
                 }
 
                 foreach ($found as $checked) {

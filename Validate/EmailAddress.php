@@ -16,18 +16,18 @@
  * @package    Zend_Validate
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: EmailAddress.php 21083 2010-02-18 19:29:20Z thomas $
+ * @version    $Id: EmailAddress.php 21461 2010-03-10 22:34:03Z thomas $
  */
 
 /**
  * @see Zend_Validate_Abstract
  */
-// require_once 'Zend/Validate/Abstract.php';
+require_once 'Zend/Validate/Abstract.php';
 
 /**
  * @see Zend_Validate_Hostname
  */
-// require_once 'Zend/Validate/Hostname.php';
+require_once 'Zend/Validate/Hostname.php';
 
 /**
  * @category   Zend
@@ -278,7 +278,7 @@ class Zend_Validate_EmailAddress extends Zend_Validate_Abstract
     public function setValidateMx($mx)
     {
         if ((bool) $mx && !$this->validateMxSupported()) {
-            // require_once 'Zend/Validate/Exception.php';
+            require_once 'Zend/Validate/Exception.php';
             throw new Zend_Validate_Exception('MX checking not available on this system');
         }
 
@@ -443,7 +443,9 @@ class Zend_Validate_EmailAddress extends Zend_Validate_Abstract
     {
         $mxHosts = array();
         $result = getmxrr($this->_hostname, $mxHosts);
-        if ($result && $this->_options['deep'] && function_exists('checkdnsrr')) {
+        if (!$result) {
+            $this->_error(self::INVALID_MX_RECORD);
+        } else if ($this->_options['deep'] && function_exists('checkdnsrr')) {
             $validAddress = false;
             $reserved     = true;
             foreach ($mxHosts as $hostname) {

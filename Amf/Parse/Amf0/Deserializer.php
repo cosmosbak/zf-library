@@ -17,20 +17,20 @@
  * @subpackage Parse_Amf0
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Deserializer.php 20096 2010-01-06 02:05:09Z bkarwin $
+ * @version    $Id: Deserializer.php 21210 2010-02-27 10:37:39Z yoshida@zend.co.jp $
  */
 
 /** Zend_Amf_Constants */
-// require_once 'Zend/Amf/Constants.php';
+require_once 'Zend/Amf/Constants.php';
 
 /** @see Zend_Amf_Parse_Deserializer */
-// require_once 'Zend/Amf/Parse/Deserializer.php';
+require_once 'Zend/Amf/Parse/Deserializer.php';
 
 /**
  * Read an AMF0 input stream and convert it into PHP data types
  *
  * @todo       Implement Typed Object Class Mapping
- * @todo       Class could be implmented as Factory Class with each data type it's own class
+ * @todo       Class could be implemented as Factory Class with each data type it's own class
  * @package    Zend_Amf
  * @subpackage Parse_Amf0
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
@@ -39,7 +39,7 @@
 class Zend_Amf_Parse_Amf0_Deserializer extends Zend_Amf_Parse_Deserializer
 {
     /**
-     * An array of objects used for recursivly deserializing an object.
+     * An array of objects used for recursively deserializing an object.
      * @var array
      */
     protected $_reference = array();
@@ -130,7 +130,7 @@ class Zend_Amf_Parse_Amf0_Deserializer extends Zend_Amf_Parse_Deserializer
                 return $this->readAmf3TypeMarker();
 
             default:
-                // require_once 'Zend/Amf/Exception.php';
+                require_once 'Zend/Amf/Exception.php';
                 throw new Zend_Amf_Exception('Unsupported marker type: ' . $typeMarker);
         }
     }
@@ -170,7 +170,7 @@ class Zend_Amf_Parse_Amf0_Deserializer extends Zend_Amf_Parse_Deserializer
     /**
      * Read reference objects
      *
-     * Used to gain access to the private array of refrence objects.
+     * Used to gain access to the private array of reference objects.
      * Called when marker type is 7.
      *
      * @return object
@@ -180,7 +180,7 @@ class Zend_Amf_Parse_Amf0_Deserializer extends Zend_Amf_Parse_Deserializer
     {
         $key = $this->_stream->readInt();
         if (!array_key_exists($key, $this->_reference)) {
-            // require_once 'Zend/Amf/Exception.php';
+            require_once 'Zend/Amf/Exception.php';
             throw new Zend_Amf_Exception('Invalid reference key: '. $key);
         }
         return $this->_reference[$key];
@@ -203,7 +203,7 @@ class Zend_Amf_Parse_Amf0_Deserializer extends Zend_Amf_Parse_Deserializer
     }
 
     /**
-     * Converts numberically indexed actiosncript arrays into php arrays.
+     * Converts numerically indexed actiosncript arrays into php arrays.
      *
      * Called when marker type is 10
      *
@@ -234,7 +234,7 @@ class Zend_Amf_Parse_Amf0_Deserializer extends Zend_Amf_Parse_Deserializer
         // so read and ignore.
         $offset = $this->_stream->readInt();
 
-        // require_once 'Zend/Date.php';
+        require_once 'Zend/Date.php';
         $date   = new Zend_Date($timestamp);
         return $date;
     }
@@ -262,7 +262,7 @@ class Zend_Amf_Parse_Amf0_Deserializer extends Zend_Amf_Parse_Deserializer
      */
     public function readTypedObject()
     {
-         // require_once 'Zend/Amf/Parse/TypeLoader.php';
+         require_once 'Zend/Amf/Parse/TypeLoader.php';
         // get the remote class name
         $className = $this->_stream->readUTF();
         $loader = Zend_Amf_Parse_TypeLoader::loadType($className);
@@ -287,7 +287,7 @@ class Zend_Amf_Parse_Amf0_Deserializer extends Zend_Amf_Parse_Deserializer
      */
     public function readAmf3TypeMarker()
     {
-        // require_once 'Zend/Amf/Parse/Amf3/Deserializer.php';
+        require_once 'Zend/Amf/Parse/Amf3/Deserializer.php';
         $deserializer = new Zend_Amf_Parse_Amf3_Deserializer($this->_stream);
         $this->_objectEncoding = Zend_Amf_Constants::AMF3_OBJECT_ENCODING;
         return $deserializer->readTypeMarker();

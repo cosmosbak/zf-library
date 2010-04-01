@@ -16,13 +16,13 @@
  * @package    Zend_Validate
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: CreditCard.php 20358 2010-01-17 19:03:49Z thomas $
+ * @version    $Id: CreditCard.php 21570 2010-03-19 19:00:50Z thomas $
  */
 
 /**
  * @see Zend_Validate_Abstract
  */
-// require_once 'Zend/Validate/Abstract.php';
+require_once 'Zend/Validate/Abstract.php';
 
 /**
  * @category   Zend
@@ -227,7 +227,7 @@ class Zend_Validate_CreditCard extends Zend_Validate_Abstract
     public function setService($service)
     {
         if (!is_callable($service)) {
-            // require_once 'Zend/Validate/Exception.php';
+            require_once 'Zend/Validate/Exception.php';
             throw new Zend_Validate_Exception('Invalid callback given');
         }
 
@@ -259,26 +259,28 @@ class Zend_Validate_CreditCard extends Zend_Validate_Abstract
 
         $length = strlen($value);
         $types  = $this->getType();
-        $found  = false;
+        $foundp = false;
+        $foundl = false;
         foreach ($types as $type) {
-            if (in_array($length, $this->_cardLength[$type])) {
-                foreach ($this->_cardType[$type] as $prefix) {
-                    if (substr($value, 0, strlen($prefix)) == $prefix) {
-                        $found = true;
-                        break;
+            foreach ($this->_cardType[$type] as $prefix) {
+                if (substr($value, 0, strlen($prefix)) == $prefix) {
+                    $foundp = true;
+                    if (in_array($length, $this->_cardLength[$type])) {
+                        $foundl = true;
+                        break 2;
                     }
                 }
             }
         }
 
-        if ($found == false) {
-            if (!in_array($length, $this->_cardLength[$type])) {
-                $this->_error(self::LENGTH, $value);
-                return false;
-            } else {
-                $this->_error(self::PREFIX, $value);
-                return false;
-            }
+        if ($foundp == false){
+            $this->_error(self::PREFIX, $value);
+            return false;
+        }
+
+        if ($foundl == false) {
+            $this->_error(self::LENGTH, $value);
+            return false;
         }
 
         $sum    = 0;
@@ -297,7 +299,7 @@ class Zend_Validate_CreditCard extends Zend_Validate_Abstract
 
         if (!empty($this->_service)) {
             try {
-                // require_once 'Zend/Validate/Callback.php';
+                require_once 'Zend/Validate/Callback.php';
                 $callback = new Zend_Validate_Callback($this->_service);
                 $callback->setOptions($this->_type);
                 if (!$callback->isValid($value)) {

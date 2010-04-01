@@ -16,18 +16,18 @@
  * @package    Zend_Validate
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Float.php 20532 2010-01-22 20:18:23Z thomas $
+ * @version    $Id: Float.php 21664 2010-03-27 21:39:38Z thomas $
  */
 
 /**
  * @see Zend_Validate_Abstract
  */
-// require_once 'Zend/Validate/Abstract.php';
+require_once 'Zend/Validate/Abstract.php';
 
 /**
  * @see Zend_Locale_Format
  */
-// require_once 'Zend/Locale/Format.php';
+require_once 'Zend/Locale/Format.php';
 
 /**
  * @category   Zend
@@ -70,15 +70,13 @@ class Zend_Validate_Float extends Zend_Validate_Abstract
         }
 
         if (empty($locale)) {
-            // require_once 'Zend/Registry.php';
+            require_once 'Zend/Registry.php';
             if (Zend_Registry::isRegistered('Zend_Locale')) {
                 $locale = Zend_Registry::get('Zend_Locale');
             }
         }
 
-        if ($locale !== null) {
-            $this->setLocale($locale);
-        }
+        $this->setLocale($locale);
     }
 
     /**
@@ -96,7 +94,7 @@ class Zend_Validate_Float extends Zend_Validate_Abstract
      */
     public function setLocale($locale = null)
     {
-        // require_once 'Zend/Locale.php';
+        require_once 'Zend/Locale.php';
         $this->_locale = Zend_Locale::findLocale($locale);
         return $this;
     }
@@ -121,27 +119,14 @@ class Zend_Validate_Float extends Zend_Validate_Abstract
         }
 
         $this->_setValue($value);
-        if ($this->_locale === null) {
-            $locale        = localeconv();
-            $valueFiltered = str_replace($locale['thousands_sep'], '', (string) $value);
-            $valueFiltered = str_replace($locale['decimal_point'], '.', $valueFiltered);
-
-            if (strval(floatval($valueFiltered)) != $valueFiltered) {
+        try {
+            if (!Zend_Locale_Format::isFloat($value, array('locale' => $this->_locale))) {
                 $this->_error(self::NOT_FLOAT);
                 return false;
             }
-
-        } else {
-            try {
-                if (!Zend_Locale_Format::isFloat($value, array('locale' => 'en')) &&
-                    !Zend_Locale_Format::isFloat($value, array('locale' => $this->_locale))) {
-                    $this->_error(self::NOT_FLOAT);
-                    return false;
-                }
-            } catch (Zend_Locale_Exception $e) {
-                $this->_error(self::NOT_FLOAT);
-                return false;
-            }
+        } catch (Zend_Locale_Exception $e) {
+            $this->_error(self::NOT_FLOAT);
+            return false;
         }
 
         return true;

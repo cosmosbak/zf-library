@@ -15,16 +15,16 @@
  * @category   Zend
  * @package    Zend_Translate
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
- * @version    $Id: Csv.php 20096 2010-01-06 02:05:09Z bkarwin $
+ * @version    $Id: Csv.php 21662 2010-03-27 20:23:42Z thomas $
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
 
 /** Zend_Locale */
-// require_once 'Zend/Locale.php';
+require_once 'Zend/Locale.php';
 
 /** Zend_Translate_Adapter */
-// require_once 'Zend/Translate/Adapter.php';
+require_once 'Zend/Translate/Adapter.php';
 
 
 /**
@@ -40,17 +40,34 @@ class Zend_Translate_Adapter_Csv extends Zend_Translate_Adapter
     /**
      * Generates the adapter
      *
-     * @param  string              $data     OPTIONAL Translation data
-     * @param  string|Zend_Locale  $locale   OPTIONAL Locale/Language to set, identical with locale identifier,
-     *                                       see Zend_Locale for more information
-     * @param  array               $options  OPTIONAL Options for this adapter
+     * @param  array|Zend_Config $options Translation content
      */
-    public function __construct($data = null, $locale = null, array $options = array())
+    public function __construct($options = array())
     {
         $this->_options['delimiter'] = ";";
         $this->_options['length']    = 0;
         $this->_options['enclosure'] = '"';
-        parent::__construct($data, $locale, $options);
+
+        if ($options instanceof Zend_Config) {
+            $options = $options->toArray();
+        } else if (func_num_args() > 1) {
+            $args               = func_get_args();
+            $options            = array();
+            $options['content'] = array_shift($args);
+
+            if (!empty($args)) {
+                $options['locale'] = array_shift($args);
+            }
+
+            if (!empty($args)) {
+                $opt     = array_shift($args);
+                $options = array_merge($opt, $options);
+            }
+        } else if (!is_array($options)) {
+            $options = array('content' => $options);
+        }
+
+        parent::__construct($options);
     }
 
     /**
@@ -68,7 +85,7 @@ class Zend_Translate_Adapter_Csv extends Zend_Translate_Adapter
         $options     = $options + $this->_options;
         $this->_file = @fopen($filename, 'rb');
         if (!$this->_file) {
-            // require_once 'Zend/Translate/Exception.php';
+            require_once 'Zend/Translate/Exception.php';
             throw new Zend_Translate_Exception('Error opening translation file \'' . $filename . '\'.');
         }
 
